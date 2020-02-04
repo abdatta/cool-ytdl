@@ -4,8 +4,12 @@ import * as ytdl from 'ytdl-core';
 
 const app = express()
 app.set('view engine', 'hbs');
- 
+
 app.get('/', (req, res) => {
+    res.render('home');
+});
+
+app.get('/options', (req, res) => {
     const link = req.query.link;
     ytdl.getInfo(link, (err, info) => {
         if (err) {
