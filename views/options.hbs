@@ -27,29 +27,30 @@
             {{/each}}
             <br>
             <h3>Audio Only</h3>
-            {{#each only_audios}}
-                <div>
-                    <a  href="/download?link={{../link}}&itag={{this.itag}}"
-                        download="{{../title}} [No Video][{{this.audioBitrate}}kbps].{{ this.container }}"
-                        type="{{this.mimeType}}">
-                        <button type="button" class="btn btn-danger">{{ this.container }}</button>
-                    </a>
-                    <span><b>Audio</b>: {{ this.audioBitrate }}kbps</span>
-                </div>
-            {{/each}}
-        </div>
-        <div class="category">
+            <select id="audios">
+                {{#each only_audios}}
+                    <option value="{{this.itag}}"
+                            audiobitrate="{{ this.audioBitrate }}kbps"
+                            constainer="{{this.container}}"
+                            mimetype="{{this.mimeType}}">
+                        {{ this.audioBitrate }}kbps - {{this.container}} - {{this.codecs}}
+                    </option>
+                {{/each}}
+            </select>
             <h3>Video Only</h3>
-            {{#each only_videos}}
-                <div>
-                    <a  href="/download?link={{../link}}&itag={{this.itag}}"
-                        download="{{../title}} [{{this.qualityLabel}}][No Audio].{{ this.container }}"
-                        type="{{this.mimeType}}">
-                        <button type="button" class="btn btn-primary">{{ this.container }}</button>
-                    </a>
-                    <span><b>Video</b>: {{ this.qualityLabel }}</span>
-                </div>
-            {{/each}}
+            <br>
+            <select id="videos">
+                {{#each only_videos}}
+                    <option value="{{this.itag}}"
+                            qualitylabel="{{ this.qualityLabel }}"
+                            constainer="{{this.container}}"
+                            mimetype="{{this.mimeType}}">
+                        {{ this.qualityLabel }} - {{this.container}} - {{this.codecs}}
+                    </option>
+                {{/each}}
+            </select>
+            <br>
+            <button type="button" class="btn btn-success" onclick="merge()">Download</button>
         </div>
     
         <!-- Optional JavaScript -->
@@ -58,6 +59,46 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="/script.js"></script>
+        <script>
+            function merge() {
+                const audio_elem = $('#audios > option:selected');
+                const video_elem = $('#videos > option:selected')
+
+                const audio = {
+                    itag: audio_elem.attr('value'),
+                    audioBitrate: audio_elem.attr('audiobitrate'),
+                    container: audio_elem.attr('container'),
+                    mimeType: audio_elem.attr('mimetype'),
+                }
+
+                const video = {
+                    itag: video_elem.attr('value'),
+                    qualityLabel: video_elem.attr('qualitylabel'),
+                    container: video_elem.attr('container'),
+                    mimeType: video_elem.attr('mimetype'),
+                }
+
+                download(
+                    `/merge?link={{link}}&a_itag=${audio.itag}&v_itag=${video.itag}`,
+                    `{{title}} [${video.qualityLabel}][${audio.audioBitrate}kbps].mkv`,
+                    `video/x-matroska`
+                );
+            }
+
+            function download(url, title, type) {
+                //creating an invisible element
+                var element = document.createElement('a');
+                element.setAttribute('href', url);
+                element.setAttribute('download', title);
+                element.setAttribute('type', type);
+
+                document.body.appendChild(element);
+
+                element.click();
+
+                document.body.removeChild(element);
+            }
+        </script>
         <style>
             .categories {
                 display: flex;
