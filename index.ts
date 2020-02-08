@@ -19,6 +19,7 @@ app.get('/options', (req, res) => {
         }
         // res.json(info);
         // res.json(info.formats.map(i => ({...i, url: undefined})));
+        info.formats.forEach(f => f.codecs = f.codecs.split('.')[0]);
         const audio_videos = info.formats.filter(i => i.mimeType.startsWith('video') && i['audioBitrate']);
         const only_videos = info.formats.filter(i => i.mimeType.startsWith('video') && !(i['audioBitrate']));
         const only_audios = info.formats.filter(i => i.mimeType.startsWith('audio'));

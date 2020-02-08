@@ -5,61 +5,103 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <link rel="stylesheet" href="/style.css">
+        <!-- Compiled and minified Materialize CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <!-- jQuery first, then Materialize JS -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <!-- Compiled and minified Materialize JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     
         <title>Cool Youtube Downloader</title>
     </head>
     <body class="categories">
+        <h2>Cool Youtube Downloader</h2>
         <div class="category">
-            <h3>Video with Audio</h3>
+            <h4>Video with Audio</h4>
             {{#each audio_videos}}
                 <div>
                     <a  href="/download?link={{../link}}&itag={{this.itag}}"
                         download="{{../title}} [{{this.qualityLabel}}][{{this.audioBitrate}}kbps].{{ this.container }}"
                         type="{{this.mimeType}}">
-                        <button type="button" class="btn btn-success">{{ this.container }}</button>
+                        <button type="button" class="btn waves-effect waves-light deep-orange">{{ this.container }}</button>
                     </a>
                     <span><b>Video</b>: {{ this.qualityLabel}}</span>
                     <span><b>Audio</b>: {{ this.audioBitrate}}kbps</span>
                 </div>
             {{/each}}
-            <br>
-            <h3>Audio Only</h3>
-            <select id="audios">
-                {{#each only_audios}}
-                    <option value="{{this.itag}}"
-                            audiobitrate="{{ this.audioBitrate }}kbps"
-                            constainer="{{this.container}}"
-                            mimetype="{{this.mimeType}}">
-                        {{ this.audioBitrate }}kbps - {{this.container}} - {{this.codecs}}
-                    </option>
-                {{/each}}
-            </select>
-            <h3>Video Only</h3>
-            <br>
-            <select id="videos">
-                {{#each only_videos}}
-                    <option value="{{this.itag}}"
-                            qualitylabel="{{ this.qualityLabel }}"
-                            constainer="{{this.container}}"
-                            mimetype="{{this.mimeType}}">
-                        {{ this.qualityLabel }} - {{this.container}} - {{this.codecs}}
-                    </option>
-                {{/each}}
-            </select>
-            <br>
-            <button type="button" class="btn btn-success" onclick="merge()">Download</button>
         </div>
-    
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <script src="/script.js"></script>
+
+        <div class="card-panel deep-orange lighten-4">
+            <h5>Custom Options</h5>
+            <div class="options">
+                <b>Video:</b>
+                <div class="input-field">
+                    <select id="videos">
+                        {{#each only_videos}}
+                            <option value="{{this.itag}}"
+                                    qualitylabel="{{ this.qualityLabel }}"
+                                    container="{{this.container}}"
+                                    mimetype="{{this.mimeType}}"
+                                >{{ this.qualityLabel }} ({{this.codecs}})</option>
+                        {{/each}}
+                    </select>
+                    <label>Quality (codec)</label>
+                </div>
+                <b>Audio:</b>
+                <div class="input-field">
+                    <select id="audios">
+                        {{#each only_audios}}
+                            <option value="{{this.itag}}" class="deep-orange"
+                                    audiobitrate="{{ this.audioBitrate }}kbps"
+                                    container="{{this.container}}"
+                                    mimetype="{{this.mimeType}}"
+                                ><span class="deep-orange-text">{{ this.audioBitrate }}kbps ({{this.codecs}})</span></option>
+                        {{/each}}
+                    </select>
+                    <label>Bitrate (codec)</label>
+                </div>
+            </div>
+            <button type="button" class="btn waves-effect waves-light deep-orange" onclick="merge()">Download</button>
+        </div>
+
+        <style>
+            body {
+                padding: 15px;
+                display: flex;
+                flex-flow: column;
+                align-items: center;
+            }
+            .category {
+                display: flex;
+                flex-flow: column;
+            }
+            .card-panel {
+                padding: 15px;
+                display: flex;
+                flex-flow: column;
+                align-items: center;
+            }
+            .options {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+            }
+            .options > * {
+                margin: 10px;
+            }
+            .input-field {
+            }
+            .btn {
+                margin: 5px;
+            }
+            .dropdown-content li>span {
+                color: black;
+            }
+        </style>
         <script>
+            $(document).ready(function(){
+                $('select').formSelect();
+            });
             function merge() {
                 const audio_elem = $('#audios > option:selected');
                 const video_elem = $('#videos > option:selected')
@@ -99,18 +141,5 @@
                 document.body.removeChild(element);
             }
         </script>
-        <style>
-            .categories {
-                display: flex;
-                justify-content: space-evenly;
-            }
-            .category {
-                display: flex;
-                flex-flow: column;
-            }
-            .btn {
-                margin: 5px;
-            }
-        </style>
-    </body class="categories">
+    </body>
 </html>

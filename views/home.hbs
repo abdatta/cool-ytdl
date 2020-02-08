@@ -4,28 +4,24 @@
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <link rel="stylesheet" href="/style.css">
+
+        <!-- Compiled and minified Materialize CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <!-- jQuery first, then Materialize JS -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <!-- Compiled and minified Materialize JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     
         <title>Cool Youtube Downloader</title>
     </head>
     <body>
 
-        <h2>Enter Youtube Link</h2>
-        <div class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-            <input id="link" type="text" class="form-control" name="link">
-        </div><br>
-        <button type="button" class="btn btn-success" onclick="options()">Fetch</button>
+        <h2>Cool Youtube Downloader</h2>
+        <div class="input-field">
+          <input placeholder="Enter Youtube Link Here" id="link" type="text">
+        </div>
+        <button type="button" class="btn waves-effect waves-light deep-orange" onclick="options()">Fetch</button>
     
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <script src="/script.js"></script>
         <script>
             function options() {
                 var link = $('#link').val();
@@ -39,6 +35,16 @@
                 flex-flow: column;
                 align-items: center;
                 margin: 20px
+            }
+            .input-field {
+                width: 50%;
+            }
+            .input-field > input {
+                text-align: center;
+            }
+            input:focus {
+                border-bottom: 1px solid #ff5722 !important;
+                box-shadow: 0 1px 0 0 #ff5722 !important;
             }
         </style>
     </body class="categories">
