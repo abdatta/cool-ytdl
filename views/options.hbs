@@ -17,7 +17,7 @@
     <body class="categories">
         <h2>Cool Youtube Downloader</h2>
         <div class="category">
-            <h4>Video with Audio</h4>
+            <h4>Basic Options</h4>
             {{#each audio_videos}}
                 <div>
                     <a  href="/download?link={{../link}}&itag={{this.itag}}"
@@ -30,10 +30,44 @@
                 </div>
             {{/each}}
         </div>
-
+        <h4>Custom Options</h4>
         <div class="card-panel deep-orange lighten-4">
-            <h5>Custom Options</h5>
-            <div class="options">
+			<ul id="tabs-swipe-demo" class="tabs tabs-fixed-width">
+				<li class="tab col s3"><a class="active" href="#simple-options">Simple Options</a></li>
+				<li class="tab col s3"><a class="active" href="#advanced-options">Advanced Options (beta)</a></li>
+			</ul>
+			<div id="simple-options" class="options">
+                <b>Video:</b>
+                <div class="input-field">
+                    <select id="simple_videos">
+                        {{#each only_simple_videos}}
+                            <option value="{{this.itag}}"
+                                    qualitylabel="{{ this.qualityLabel }}"
+                                    container="{{this.container}}"
+                                    mimetype="{{this.mimeType}}"
+                                >{{ this.qualityLabel }} ({{ this.filesize }})</option>
+                        {{/each}}
+                        <option qualitylabel="No Video">No Video</option>
+                    </select>
+                    <label>Quality (codec)</label>
+                </div>
+                <b>Audio:</b>
+                <div class="input-field">
+                    <select id="simple_audios">
+                        {{#each only_simple_audios}}
+                            <option value="{{this.itag}}" class="deep-orange"
+                                    audiobitrate="{{ this.audioBitrate }}kbps"
+                                    container="{{this.container}}"
+                                    mimetype="{{this.mimeType}}"
+                                ><span class="deep-orange-text">{{ this.audioBitrate }}kbps ({{ this.filesize }})</span></option>
+                        {{/each}}
+                        {{!-- <option audiobitrate="No Audio">No Audio</option> --}}
+                    </select>
+                    <label>Bitrate (codec)</label>
+                </div>
+			</div>
+
+            <div id="advanced-options" class="options">
                 <b>Video:</b>
                 <div class="input-field">
                     <select id="videos">
@@ -42,8 +76,9 @@
                                     qualitylabel="{{ this.qualityLabel }}"
                                     container="{{this.container}}"
                                     mimetype="{{this.mimeType}}"
-                                >{{ this.qualityLabel }} ({{this.codecs}})</option>
+                                >{{ this.qualityLabel }} ({{ this.filesize }}) ({{this.codecs}})</option>
                         {{/each}}
+                        <option qualitylabel="No Video">No Video</option>
                     </select>
                     <label>Quality (codec)</label>
                 </div>
@@ -55,8 +90,9 @@
                                     audiobitrate="{{ this.audioBitrate }}kbps"
                                     container="{{this.container}}"
                                     mimetype="{{this.mimeType}}"
-                                ><span class="deep-orange-text">{{ this.audioBitrate }}kbps ({{this.codecs}})</span></option>
+                                ><span class="deep-orange-text">{{ this.audioBitrate }}kbps ({{ this.filesize }}) ({{this.codecs}})</span></option>
                         {{/each}}
+                        {{!-- <option audiobitrate="No Audio">No Audio</option> --}}
                     </select>
                     <label>Bitrate (codec)</label>
                 </div>
@@ -71,11 +107,15 @@
                 flex-flow: column;
                 align-items: center;
             }
+            h4 {
+                text-align: center;
+            }
             .category {
                 display: flex;
                 flex-flow: column;
             }
             .card-panel {
+				width: 40%;
                 padding: 15px;
                 display: flex;
                 flex-flow: column;
@@ -97,14 +137,20 @@
             .dropdown-content li>span {
                 color: black;
             }
+			.carousel.carousel-slider .carousel-item {
+				height: auto;
+				min-height: 0;;
+			}
         </style>
         <script>
             $(document).ready(function(){
                 $('select').formSelect();
+				$('.tabs').tabs();
             });
             function merge() {
-                const audio_elem = $('#audios > option:selected');
-                const video_elem = $('#videos > option:selected')
+				const simple = !M.Tabs.getInstance($('.tabs')[0]).index;
+                const audio_elem = simple ? $('#simple_audios > option:selected') : $('#audios > option:selected');
+                const video_elem = simple ? $('#simple_videos > option:selected') : $('#videos > option:selected');
 
                 const audio = {
                     itag: audio_elem.attr('value'),
@@ -121,8 +167,8 @@
                 }
 
                 download(
-                    `/merge?link={{link}}&a_itag=${audio.itag}&v_itag=${video.itag}`,
-                    `{{title}} [${video.qualityLabel}][${audio.audioBitrate}kbps].mkv`,
+                    `/merge?link={{link}}${video.itag ? '&v_itag=' + video.itag : ''}${audio.itag ? '&a_itag=' + audio.itag : ''}`,
+                    `{{title}} [${video.qualityLabel}][${audio.audioBitrate}].${video.itag ? 'mkv' : audio.container}`,
                     `video/x-matroska`
                 );
             }
