@@ -104,7 +104,7 @@
                     <label>Bitrate (codec)</label>
                 </div>
             </div>
-            <button type="button" class="btn waves-effect waves-light deep-orange" onclick="merge()">Download</button>
+            <button id="dl-btn" type="button" class="btn waves-effect waves-light deep-orange" onclick="merge()">Download</button>
         </div>
 
         <style>
@@ -200,6 +200,9 @@
                     `{{title}} [${video.qualityLabel}][${audio.audioBitrate}].${video.itag ? 'mkv' : audio.container}`,
                     `video/x-matroska`
                 );
+
+                $('#dl-btn').prop('disabled', true);
+                setTimeout(() => $('#dl-btn').prop('disabled', false), 10000);
             }
 
             function download(url, title, type) {
