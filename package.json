@@ -23,7 +23,7 @@
     "typescript": "^3.7.5"
   },
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "hbs": "^4.1.0",
     "morgan": "^1.9.1",
     "prettysize": "^2.0.0",
